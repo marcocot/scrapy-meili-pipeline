@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install just
+        uses: extractions/setup-just@v3
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Sync (dev deps)
+        run: just sync
+
+      - name: Lint, type-check, test
+        run: just check
+
+      - name: Coverage (terminal)
+        run: just coverage

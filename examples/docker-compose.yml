@@ -1,0 +1,24 @@
+services:
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    container_name: meilisearch
+    environment:
+      MEILI_MASTER_KEY: masterkey
+      MEILI_NO_ANALYTICS: "true"
+    ports:
+      - "7700:7700"
+    volumes:
+      - meili_data:/meili_data
+    command: ["meilisearch", "--env=development", "--http-addr=0.0.0.0:7700"]
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://127.0.0.1:7700/health | grep -q 'available'",
+        ]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+
+volumes:
+  meili_data:
