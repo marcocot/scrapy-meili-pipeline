@@ -1,6 +1,6 @@
 [project]
 name = "scrapy-meili-pipeline"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Scrapy pipeline that batches and indexes items into Meilisearch, with task tracking and index configuration."
 readme = "README.md"
 authors = [
