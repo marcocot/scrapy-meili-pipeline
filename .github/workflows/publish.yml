@@ -1,0 +1,38 @@
+name: Publish to PyPI
+
+on:
+  push:
+    tags:
+      - "v*"
+  release:
+    types: [published] # also run when a GitHub Release is published
+
+permissions:
+  id-token: write # for PyPI Trusted Publishers
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install just
+        uses: extractions/setup-just@v3
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Sync (no dev)
+        run: uv sync --no-dev
+
+      - name: Build
+        run: just build
+
+      - name: Publish (Trusted Publisher)
+        run: just publish
