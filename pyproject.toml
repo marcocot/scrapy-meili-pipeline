@@ -1,0 +1,57 @@
+[project]
+name = "scrapy-meilisearch"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "itemadapter>=0.12.2",
+    "meilisearch>=0.37.1",
+    "scrapy>=2.13.3",
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.9.0",
+    "mypy>=1.18.2",
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.14.2",
+    "types-requests>=2.32.4.20250913",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+src = ["src", "tests"]
+
+[tool.lint]
+extend-select = ["I", "UP", "SIM", "PL", "RUF"]
+ignore = ["PLR2004"]  # magic values allowed in tests
+
+[tool.ruff.lint.isort]
+known-first-party = ["scrapy_meili_pipeline"]
+
+# ---- black ------------------------------------------------------------------
+[tool.black]
+line-length = 120
+target-version = ["py312"]
+
+# ---- mypy -------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_ignores = true
+plugins = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["src"]
