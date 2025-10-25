@@ -10,7 +10,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  ci:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # can create commits/branches
+      pull-requests: write # can open/update PRs
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: .github/release-please-config.json
+          manifest-file: .github/release-please-manifest.json
+
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -34,3 +50,33 @@ jobs:
 
       - name: Coverage (terminal)
         run: just coverage
+
+  publish:
+    needs: [release, check]
+    if: ${{ needs.release.outputs.release_created == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install just
+        uses: extractions/setup-just@v3
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Sync (no dev)
+        run: uv sync --no-dev
+
+      - name: Build
+        run: just build
+
+      - name: Publish (Trusted Publisher)
+        run: just publish
