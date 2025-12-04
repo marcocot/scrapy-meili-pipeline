@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/marcocot/scrapy-meili-pipeline/compare/scrapy-meili-pipeline-v0.1.1...scrapy-meili-pipeline-v0.1.2) (2025-12-04)
+
+
+### Chores
+
+* **deps:** bump actions/checkout from 5 to 6 ([#11](https://github.com/marcocot/scrapy-meili-pipeline/issues/11)) ([bf2aa87](https://github.com/marcocot/scrapy-meili-pipeline/commit/bf2aa8756bff9be77b853e6e55bbec49772c37e6))
+
 ## [0.1.1](https://github.com/marcocot/scrapy-meili-pipeline/compare/scrapy-meili-pipeline-v0.1.0...scrapy-meili-pipeline-v0.1.1) (2025-10-25)
 
 
